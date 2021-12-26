@@ -1,3 +1,4 @@
+from os import close
 import tkinter as tk
 import winsound
 from random import randbytes, randrange
@@ -10,100 +11,144 @@ frame=tk.Frame()
 frame.master.title("SPACE MINER")
 canvas=tk.Canvas(frame)
 img=tk.PhotoImage(file="image\space.png")
-# --------------add sound background-----------
-# winsound .PlaySound("sound\spacebackground.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
 # ------------------------grid constants----------------
 GRID=[
-    [0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,3,0,0,0,3,0],
-    [0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,3,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0],
-    [0,0,0,3,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0],
-    [0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,3,0,0,0,0],
-    [0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,3,0,3,0,0,0,0,0,0,0,0,3,0,3,0,0,0,0,3,0,0,0,0,0],
-    [0,2,0,0,0,0,0,0,0,0,0,3,0,0,3,0,0,0,0,0,0,0,0,0,3,0,0,0],
-    [0,0,0,0,0,0,3,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,3,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,3,0,0,0,0,3,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0,0,0,0]
+    [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+    [4,0,0,2,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
+    [4,0,0,0,4,4,4,0,0,0,0,0,4,0,4,0,0,0,0,0,4,4,4,0,0,0,4],
+    [4,0,0,0,4,0,2,0,0,2,0,4,0,3,0,4,0,0,0,0,0,2,4,0,2,0,4],
+    [4,0,0,0,4,0,0,0,0,2,4,0,0,0,0,2,4,0,0,0,3,0,4,0,0,2,4],
+    [4,0,0,0,0,0,0,0,0,4,3,0,0,4,0,0,0,4,0,0,0,0,0,0,0,0,4],
+    [4,0,0,0,3,0,0,0,4,0,0,0,0,0,0,4,2,0,4,0,0,2,3,0,0,0,4],
+    [4,0,0,0,0,0,0,0,0,4,0,0,4,0,4,3,0,4,0,0,2,0,0,0,0,0,4],
+    [4,2,0,0,0,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,4],
+    [4,0,0,0,4,2,0,0,0,0,0,4,0,0,0,4,2,0,0,0,0,0,4,0,0,2,4],
+    [4,0,0,0,4,3,0,0,0,0,0,0,4,0,4,0,0,0,0,0,0,3,4,0,0,0,4],
+    [4,0,0,0,4,4,4,3,0,0,0,0,0,0,0,0,0,0,0,3,4,4,4,0,0,0,4],
+    [4,0,0,0,0,0,0,0,0,0,0,2,0,1,0,0,0,0,0,2,0,0,0,0,0,0,4],
+    [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
 ]
-
-# ---------------------function showCrystals----------------
+# --------------------image--------------------
 air=tk.PhotoImage(file="image\Air.png")
 enemy=tk.PhotoImage(file="image\enemy.png")
 point=tk.PhotoImage(file="image\point.png")
 bgFirst=tk.PhotoImage(file="image\space1.png")
+gameOver=tk.PhotoImage(file="image\gameOver.png")
+winStyle=tk.PhotoImage(file="image\winStyle.png")
+winGame=tk.PhotoImage(file="image\win.png")
+winSpace=tk.PhotoImage(file="image\winspace.png")
+Wall=tk.PhotoImage(file="image\wall.png")
 notLost = True
 number=0
+# ---------------------function showCrystals----------------
 def box():
-    canvas.create_image(400,400,image=img)
+    global buttonPlay
+    canvas.create_image(600,400,image=img)
+    canvas.create_text(1250,590,text="Your Score",font=("Pursia",15),fill="white")
     x2=50
     y2=50
     global notLost, number
-    if notLost and number <10 :
+    if notLost and number <100:
         for col in GRID:
             for row in col:
                 if row==1:
                     canvas.create_image(x2-25,y2-25,image=air)
                 elif row==2:
-                    canvas.create_image(x2-25,y2-25,image=enemy)
-                    # canvas.moveto(x2)
+                   canvas.create_image(x2-25,y2-25,image=enemy)
                 elif row==3:
                     canvas.create_image(x2-25,y2-25,image=point)
+                elif row==4:
+                    canvas.create_image(x2-25,y2-25,image=Wall)
                 x2+=50
             x2=50
             y2+=50
-    elif number == 10:
+    elif number == 100:
         win()
     else:
         lose()
+    canvas.create_text(1250,620,text=number,font=("Pursia",15),fill="white")
+    canvas.delete(buttonPlay)
+
+
 def bg():
-    canvas.create_text(100,20,text="Space Miner",font=("Pursia",20),fill="white")
-    canvas.create_text(680,650,text="Click here to Play",font=("Pursia",20),fill="white")
     canvas.create_image(650,400,image=bgFirst)
+    canvas.create_text(100,20,text="Space Miner",font=("Pursia",20),fill="white")
+    canvas.create_image(90,70,image=air)
+    canvas.create_text(680,650,text="Click here to Play",font=("Pursia",20),fill="black")
+    winsound .PlaySound("sound\play.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
 bg()
-# ---------------------Button--------------------
-def onClick():
-    box()
-    buttonPlay.pack_forget()
-buttonPlay = tk.Button(root,text="Play",font=("Pursia",15),fg="white",bg="blue",pady=15,padx=100,command=onClick)
-buttonPlay.config(width=7, height=1, bg="#007EE9",fg="yellow",border="2",rounded="2", font=("Arial", 20, "bold"))
-buttonPlay=canvas.create_window(500,250,anchor="nw", window=buttonPlay)
+
 
 # ------------------------countPoint When airplane crash Crystal------
 canvas.create_text(1250,630,text="Your Score",font=("Pursia",15),fill="white")
 myPoint=canvas.create_text(1250,660,text="0",font=("Pursia",15),fill="white")
 def countPoints():
     global number,myPoint
-    if number<10:
-        number+=1
+    if number<100:
+        number+=10
         winsound .PlaySound("sound\solid.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     else:
         canvas.delete("all")
         canvas.create_image(400,400,image=img)
-        canvas.create_text(1250,660,text=number,font=("Pursia",15),fill="white")
-        canvas.create_text(1250,630,text="Your Score",font=("Pursia",15),fill="white")
+# ---------------------Button--------------------
+def onClick():
+    box()
+    winsound .PlaySound("sound\spacebackground.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+buttonPlay = tk.Button(root,text="Play",font=("Pursia",15),fg="white",bg="blue",pady=15,padx=100,command=onClick)
+buttonPlay=canvas.create_window(550,250,anchor="nw", window=buttonPlay)
+
+
+def restart():
+    box()
+    buttonRestart.pack_forget()
+buttonRestart= tk.Button(root,text="RESTART",font=("Times",14,"bold"),fg="white",bg="blue",pady=12,padx=50,command=restart)
+
+
+def start():
+    box()
+buttonStart = tk.Button(root,text="Play",font=("Pursia",15),fg="white",bg="blue",pady=12,padx=50,command=start)
+
+
+def close():
+    root.destroy()
+buttonClose=Button(text="EXIT", font=("Times", 14,"bold"),fg="white",bg="blue",pady=12,padx=50,command=close)
 # ---------------------For display Win or Lose-------------
 def win():
+    global buttonStart,buttonClose
     canvas.delete("all")
-    canvas.create_image(400,400,image=img)
-    canvas.create_text(650,350,text="You Win !",font=("Pursia",45),fill="white")
-    canvas.create_text(650,450,text="congratulations",font=("Pursia",15),fill="white")
-    buttonPlay = tk.Button(root,text="start",font=("Pursia",15),fg="white",bg="blue",pady=15,padx=15,command=onClick,tags="PNC")
-    buttonPlay.config(width=7, height=1, bg="#007EE9",fg="yellow",border="2", font=("Arial", 20, "bold"))
-    buttonPlay=canvas.create_window(520,500,anchor="nw", window=buttonPlay)
-    buttonPlay = tk.Button(root,text="cancel",font=("Pursia",15),fg="white",bg="blue",pady=15,padx=15,command=onClick)
-    buttonPlay.config(width=7, height=1, bg="#007EE9",fg="yellow",border="2", font=("Arial", 20, "bold"))
-    buttonPlay=canvas.create_window(700,500,anchor="nw", window=buttonPlay)
-
+    canvas.create_window(530,450,anchor="nw", window=buttonStart)
+    canvas.create_window(700,450,anchor="nw", window=buttonClose)
+    canvas.create_image(680,250,image=winSpace)
+    canvas.create_image(680,200,image=winGame)
+    canvas.create_image(680,200,image=winStyle)
+    canvas.create_text(680,400,text="CONGRATULATION",font=("Pursia",15,"bold"),fill="white")
+    canvas.create_text(680,600,text=number,font=("Pursia",15),fill="white")
+    canvas.create_text(680,550,text="Your Score",font=("Pursia",15),fill="white")
+    winsound .PlaySound("sound\win.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
 def lose():  
+    global buttonClose,buttonRestart
+    canvas.delete("all")
+    canvas.create_window(450,350,anchor="nw", window=buttonRestart)
+    canvas.create_window(700,350,anchor="nw", window=buttonClose)
+    canvas.create_image(700,400,image=gameOver)
+    canvas.create_text(100,100,text=number,font=("Pursia",15),fill="white")
+    canvas.create_text(100,50,text="Your Score",font=("Pursia",15),fill="white")
+    winsound .PlaySound("sound\lose.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+# ----------------------------move--------------
+def move():
+    global GRID
     canvas.delete("all")
     canvas.create_image(400,400,image=img)
-    canvas.create_text(650,350,text="You Lose!",font=("Pursia",45),fill="white")
-# --------------------------------Button Play Again-------------------
-# def onClick():
-
+    canvas.create_text(1250,630,text="Your Score",font=("Pursia",15),fill="white")
+    canvas.create_text(1250,660,text=number,font=("Pursia",15),fill="white")
+    isRight=False
+    for col in range(len(GRID)):
+        for row in range(len(GRID[col])-1):
+            if GRID[col][row]==1 and not isRight and GRID[col][row+1]==0:
+                GRID[col][row]=0
+                GRID[col][row+1]=1
+                isRight=True
+    box()
 # ---------------------------moveright----------------
 def moveRight(event):
     global GRID
@@ -117,15 +162,20 @@ def moveRight(event):
             if GRID[col][row]==1 and not isRight and GRID[col][row+1]==0:
                 GRID[col][row]=0
                 GRID[col][row+1]=1
-                isRight=True
-            elif (GRID[col][row]==1) and (not isRight) and (GRID[col][row+1]==3):
-                GRID[col][row]=0 
-                GRID[col][row+1]=1
-                countPoints()
-                isRight=True
-    box()
-root.bind("<Right>",moveRight)
-    # ----------------------------moveLeft----------------------------
+#                 isRight=True
+# #             elif (GRID[col][row]==1) and (not isRight) and (GRID[col][row+1]==3):
+# #                 GRID[col][row]=0 
+# #                 GRID[col][row+1]=1
+# #                 countPoints()
+# #                 isRight=True
+# #             elif (GRID[col][row]==1) and (GRID[col][row+1]==2) and (GRID[col][row-1]==0) and not isRight:
+# #                 lose()
+# #                 isRight=True
+# #                 canvas.destroy("all")
+# #     box()
+# # root.bind("<Right>",moveRight)
+# # ----------------------------moveLeft----------------------------
+# 
 def moveleft(event):
     global GRID
     canvas.delete("all")
@@ -144,10 +194,15 @@ def moveleft(event):
                 GRID[col][row-1]=1
                 countPoints()
                 isLeft=True
+            elif (GRID[col][row]==1) and (GRID[col][row-1]==2) and (GRID[col][row+1]==0) and not isLeft:
+                lose()
+                isLeft=True
+                canvas.destroy("all")
     box()
 root.bind("<Left>",moveleft)
-    # # --------------------moveDown------------------
+# # --------------------moveDown------------------
 def moveDown(event):
+    # moveChar("down")
     global GRID, notLost
     canvas.delete("all")
     canvas.create_image(400,400,image=img)
@@ -165,14 +220,15 @@ def moveDown(event):
                 GRID[col+1][row]=1
                 countPoints()
                 isDown=True
-            elif (GRID[col][row]==1) and (GRID[col-1][row]==2) and not isDown:
+            elif (GRID[col][row]==1) and (GRID[col+1][row]==2) and (GRID[col-1][row]==0) and not isDown:
                 lose()
-                isDown=False
+                isDown=True
                 canvas.destroy("all")
     box()
 root.bind("<Down>",moveDown)
-    # # -------------------------------------moveUp-------------------
+# # -------------------------------------moveUp-------------------
 def moveUp(event):
+    # moveChar("up")
     global GRID
     canvas.delete("all")
     canvas.create_image(400,400,image=img)
@@ -193,11 +249,13 @@ def moveUp(event):
                 isUp=True
             elif (GRID[col][row]==1) and (GRID[col-1][row]==2) and (GRID[col+1][row]==0) and not isUp:
                 lose()
-                isUp=True
+                isUp=False
                 canvas.destroy("all")
-    # print(isUp)
     box() 
+    
 root.bind("<Up>",moveUp)
+
+
 # ----------------display------------
 canvas.pack(expand=True,fill="both")
 frame.pack(expand=True,fill="both")

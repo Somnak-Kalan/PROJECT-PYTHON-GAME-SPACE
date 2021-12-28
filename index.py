@@ -78,7 +78,7 @@ def draw():
         lose()
     canvas.create_text(1250,620,text=number,font=("Pursia",15),fill="white")
     canvas.delete(buttonPlay)
-
+# --------------when player win it will display a new window--
 def win():
     global buttonStart,buttonClose
     canvas.delete("all")
@@ -87,10 +87,11 @@ def win():
     canvas.create_image(680,250,image=winSpace)
     canvas.create_image(680,200,image=winGame)
     canvas.create_image(680,200,image=winStyle)
-    canvas.create_text(680,400,text="CONGRATULATION",font=("Pursia",15,"bold"),fill="white")
+    canvas.create_text(680,400,text="CONGRATULATION !",font=("Pursia",15,"bold"),fill="white")
     canvas.create_text(680,600,text=number,font=("Pursia",15),fill="white")
     canvas.create_text(680,550,text="Your Score",font=("Pursia",15),fill="white")
     winsound .PlaySound("sound\win.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+# ------when you touch enemy will lose and display new window--
 def lose():  
     global buttonClose,buttonRestart
     canvas.delete("all")
@@ -189,7 +190,6 @@ def start():
 # ------------------button exit when player want to leave program------------
 def close():
     root.destroy()
-# ---------------Display Win or Lose when player play-------------
 # ---------------------button create text in first window ------------
 canvas.create_text(1250,630,text="Your Score",font=("Pursia",15),fill="white")
 myPoint=canvas.create_text(1250,660,text="0",font=("Pursia",15),fill="white")

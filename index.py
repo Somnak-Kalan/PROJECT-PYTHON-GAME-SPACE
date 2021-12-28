@@ -1,4 +1,4 @@
-# from os import close
+from os import close
 import tkinter as tk
 import winsound
 from random import randbytes, randrange
@@ -7,20 +7,20 @@ from tkinter import font
 from typing import Text
 # ------------------create window---------
 root=tk.Tk()
-root.geometry("2000x1000")
+root.geometry("1200x1000")
 frame=tk.Frame()
 frame.master.title("SPACE MINER")
 canvas=tk.Canvas(frame)
 # ----------------------images------------------
-img=tk.PhotoImage(file="image\space.png")
 air=tk.PhotoImage(file="image\Air.png")
 enemy=tk.PhotoImage(file="image\enemy.png")
 point=tk.PhotoImage(file="image\point.png")
+img=tk.PhotoImage(file="image\space.png")
 bgFirst=tk.PhotoImage(file="image\space1.png")
+winSpace=tk.PhotoImage(file="image\winspace.png")
 gameOver=tk.PhotoImage(file="image\gameOver.png")
 winStyle=tk.PhotoImage(file="image\winStyle.png")
 winGame=tk.PhotoImage(file="image\win.png")
-winSpace=tk.PhotoImage(file="image\winspace.png")
 Wall=tk.PhotoImage(file="image\wall.png")
 # -----------------global Variable--------
 notLost = True
@@ -106,50 +106,60 @@ def movePlayer(posi):
     isTrue=True
     for col in range(len(GRID)):
         for row in range(len(GRID[col])):
+            # ---player can move right---
                 if (posi=="Right") :
                     if  GRID[col][row]==1 and  isTrue and GRID[col][row+1]==0:
                         GRID[col][row]=0
                         GRID[col][row+1]=1
                         isTrue=False
+            #--when player touch number 3 ,player will collect and count point--
                     elif  GRID[col][row]==1 and  isTrue and GRID[col][row+1]==3:
                         GRID[col][row+1]=0
                         winsound .PlaySound("sound\solid.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
                         number+=10
+                    #--when player met number 2 player will lose
                     elif GRID[col][row]==1 and  isTrue and GRID[col][row+1]==2:
                         isFase=False
-                        
+            #---player can move left---
                 if (posi=="Left"):
                     if GRID[col][row]==1 and isTrue and GRID[col][row-1]==0 and GRID[col][row-1]!=2  :
                         GRID[col][row]=0
                         GRID[col][row-1]=1
                         isTrue=False
+            #--when player touch number 3 ,player will collect and count point--
                     elif GRID[col][row]==1 and isTrue and GRID[col][row-1]==3:
                         GRID[col][row-1]=0
                         winsound .PlaySound("sound\solid.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
                         number+=10
+                    #--when player met number 2 player will lose
                     elif GRID[col][row]==1 and  isTrue and GRID[col][row-1]==2:
                         isFase=False
-                        
+            #---player can move down---
                 if  (posi=="Down"):
                     if GRID[col][row]==1 and (isTrue) and GRID[col+1][row]==0:
                         GRID[col][row]=0
                         GRID[col+1][row]=1
                         isTrue=False
+            #--when player touch number 3 ,player will collect and count point--
                     elif GRID[col][row]==1 and (isTrue) and GRID[col+1][row]==3:
                         GRID[col+1][row]=0
                         winsound .PlaySound("sound\solid.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
                         number+=10
+                    #--when player met number 2 player will lose
                     elif GRID[col][row]==1 and  isTrue and GRID[col+1][row]==2:
                         isFase=False
+            #---player can move up---
                 if (posi=="Up"):
                     if  GRID[col][row]==1 and (isTrue) and GRID[col-1][row]==0:
                         GRID[col][row]=0 
                         GRID[col-1][row]=1
                         isTrue=False
+            #--when player touch number 3 ,player will collect and count point--
                     elif GRID[col][row]==1 and (isTrue) and GRID[col-1][row]==3:
                         GRID[col-1][row]=0
                         winsound .PlaySound("sound\solid.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
                         number+=10
+                    #--when player met number 2 player will lose
                     elif GRID[col][row]==1 and  isTrue and GRID[col-1][row]==2:
                         isFase=False
     canvas.delete("all")

@@ -24,6 +24,7 @@ winSpace=tk.PhotoImage(file="image\winspace.png")
 Wall=tk.PhotoImage(file="image\wall.png")
 # -----------------global Variable--------
 notLost = True
+isFase=True
 number=0
 # -----------------first window when user open and user should click to play---
 canvas.create_image(650,400,image=bgFirst)
@@ -34,26 +35,26 @@ canvas.create_text(680,350,text="How to Play",font=("Pursia",20))
 canvas.create_text(680,400,text="1.You should collect until 100 points you will win",font=("Pursia",20))
 canvas.create_text(680,450,text="2.If you crash on bomb You will loses",font=("Pursia",20))
 winsound .PlaySound("sound\play.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
-# ------------------------grid constants----------------
+# ------make grid for player can move by grid----------------
 GRID=[
     [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
     [4,0,0,2,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
     [4,0,0,0,4,4,4,0,0,0,0,0,4,0,4,0,0,0,0,0,4,4,4,0,0,0,4],
     [4,0,0,0,4,0,2,0,0,2,0,4,0,3,0,4,0,0,0,0,0,2,4,0,2,0,4],
     [4,0,0,0,4,0,0,0,0,2,4,0,0,0,0,2,4,0,0,0,3,0,4,0,0,2,4],
-    [4,0,0,0,0,0,0,0,0,4,3,0,0,4,0,0,0,4,0,0,0,0,0,0,0,0,4],
-    [4,0,0,0,3,0,0,0,4,0,0,0,0,0,0,4,2,0,4,0,0,2,3,0,0,0,4],
+    [4,0,0,0,0,0,0,3,0,4,3,0,0,4,0,0,0,4,0,0,0,0,0,0,0,0,4],
+    [4,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,2,0,4,0,0,2,3,0,0,0,4],
     [4,0,0,0,0,0,0,0,0,4,0,0,4,0,4,3,0,4,0,0,2,0,0,0,0,0,4],
-    [4,2,0,0,0,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,4],
+    [4,2,0,0,0,0,0,0,0,3,4,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,4],
     [4,0,0,0,4,2,0,0,0,0,0,4,0,0,0,4,2,0,0,0,0,0,4,0,0,2,4],
     [4,0,0,0,4,3,0,0,0,0,0,0,4,0,4,0,0,0,0,0,0,3,4,0,0,0,4],
     [4,0,0,0,4,4,4,3,0,0,0,0,0,0,0,0,0,0,0,3,4,4,4,0,0,0,4],
     [4,0,0,0,0,0,0,0,0,0,0,2,0,1,0,0,0,0,0,2,0,0,0,0,0,0,4],
     [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
 ]
-# --------------------for draw grid easy player run follow grid----------------
-def draw():
-    global buttonPlay,notLost, number
+# --------------------for drawgrid easy player run follow grid----------------
+def drawGrid():
+    global notLost, number
     canvas.create_image(600,400,image=img)
     canvas.create_text(1250,590,text="Your Score",font=("Pursia",15),fill="white")
     x2=50
@@ -78,9 +79,8 @@ def draw():
         lose()
     canvas.create_text(1250,620,text=number,font=("Pursia",15),fill="white")
     canvas.delete(buttonPlay)
-# --------------when player win it will display a new window--
+# ----when player win it will display a new window-and go 100 point-
 def win():
-    global buttonStart,buttonClose
     canvas.delete("all")
     canvas.create_window(530,450,anchor="nw", window=buttonStart)
     canvas.create_window(700,450,anchor="nw", window=buttonClose)
@@ -92,17 +92,16 @@ def win():
     canvas.create_text(680,550,text="Your Score",font=("Pursia",15),fill="white")
     winsound .PlaySound("sound\win.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
 # ------when you touch enemy will lose and display new window--
-def lose():  
-    global buttonClose,buttonRestart
+def lose(): 
     canvas.delete("all")
-    canvas.create_window(450,350,anchor="nw", window=buttonRestart)
-    canvas.create_window(700,350,anchor="nw", window=buttonClose)
+    canvas.create_window(450,360,anchor="nw", window=buttonRestart)
+    canvas.create_window(700,360,anchor="nw", window=buttonClose)
     canvas.create_image(700,400,image=gameOver)
     canvas.create_text(100,100,text=number,font=("Pursia",15),fill="white")
     canvas.create_text(100,50,text="Your Score",font=("Pursia",15),fill="white")
     winsound .PlaySound("sound\lose.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
 #----------Use for move player and count point and conditon to display Loses---
-def moveChar(posi):
+def movePlayer(posi):
     global isFase,number
     isTrue=True
     for col in range(len(GRID)):
@@ -156,28 +155,27 @@ def moveChar(posi):
     canvas.delete("all")
     conditionDrawOrLose()
 # -----------------------USE CONDITION FOR KNOW IT LOSE OR DRAW --------------
-isFase=True
 def conditionDrawOrLose():
     global isFalse
     if isFase:
-        draw()
+        drawGrid()
     else:
         lose()
 # ----------------------------moveRight----------------------------
 def moveRight(event):
-    moveChar("Right")
+    movePlayer("Right")
 # ----------------------------moveLeft----------------------------
 def moveleft(event):
-    moveChar("Left")
+    movePlayer("Left")
 # # # ------------------------moveDown------------------
 def moveDown(event):
-    moveChar("Down")
+    movePlayer("Down")
 # # # ------------------------moveUp-------------------
 def moveUp(event):
-    moveChar("Up")
+    movePlayer("Up")
 # ---------------------Button play first window--------------------
 def onClick():
-    draw()
+    drawGrid()
     winsound .PlaySound("sound\spacebackground.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
 # ------------------------button restart when game over-----------------
 def restart():
@@ -186,7 +184,7 @@ def restart():
     conditionDrawOrLose()
 # ---------------button start when game win-------------
 def start():
-    draw()
+    drawGrid()
 # ------------------button exit when player want to leave program------------
 def close():
     root.destroy()
